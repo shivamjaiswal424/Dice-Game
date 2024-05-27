@@ -3,6 +3,8 @@ import TotalScore from './TotalScore'
 import { NumberSelector } from './NumberSelector'
 import styled from 'styled-components'
 import RoleDice from './RoleDice'
+import { Button, OutlineButton } from '../styled/Button'
+import Rules from './Rules'
 
 const GamePlay = () => {
     const [score,setScore]=useState(0);
@@ -18,6 +20,7 @@ const GamePlay = () => {
             setError("You have not selected any number")
             return;
         }
+        setError("");
         const randomNumber=generateRandomNumber(1,7);
         setCurrentDice((prev)=>randomNumber);
 
@@ -30,17 +33,30 @@ const GamePlay = () => {
         }
         setSelectedNumber(undefined);
     }
+    const resetScore=()=>{
+        setScore(0);
+    }
+    const [showRules,setShowRules]=useState(false);
   return (
     <MainContainer>
         <div className='top_section'>
             <TotalScore score={score}/>
             <NumberSelector 
+            error={error}
+            setError={setError}
             selectedNumber={selectedNumber} 
             setSelectedNumber={setSelectedNumber}/>
         </div>
        <RoleDice 
        currentDice={currentDice}
        roleDice={roleDice}/>
+       <div className="btns">
+            <OutlineButton onClick={resetScore}>Reset</OutlineButton>
+                
+            
+            <Button onClick={()=>setShowRules((prev)=>!prev)}>{showRules?"Hide":"Show"} Rules</Button>
+       </div>
+       {showRules && <Rules/>}
     </MainContainer>
   )
 }
@@ -53,5 +69,14 @@ padding-top: 70px;
         display: flex;
         justify-content: space-around;
         align-items: end;
+    }
+    .btns{
+        margin-top: 40px;
+        gap:10px;
+        display:flex;
+        flex-direction: column;
+        justify-content: center;
+        gap:10px ;
+        align-items: center;
     }
 `;
